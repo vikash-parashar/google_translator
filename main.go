@@ -4,10 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+	"sync"
 
 	"github.com/vikashparashar/golang_project_03/cli"
 )
 
+var wg = sync.WaitGroup{}
 var (
 	sourceLang string
 	targetLang string
@@ -31,12 +34,29 @@ func main() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
+	strChan := make(chan string)
 
+	wg.Add(1)
 	var reqBody = &cli.RequestBody{
 		SourceLang: sourceLang,
 		TargetLang: targetLang,
 		SourceText: sourceText,
 	}
 
-	cli.RequestTranslate(reqBody)
+	go cli.RequestTranslate(reqBody, strChan, &wg)
+	processedString := strings.ReplaceAll(<-strChan, "+", " ")
+	// res := <-strChan
+	// fmt.Println(res)
+	fmt.Printf("%s", processedString)
+	close(strChan)
+	wg.Wait()
 }
+
+
+// terminal cmd to run the program
+
+/*
+go run -s en -st hello -t fn
+
+// Output : Bonjour
+*/
