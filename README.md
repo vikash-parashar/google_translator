@@ -19,10 +19,14 @@
 
 
 # terminal cmd to run the program
-    go run -s en -st hello -t fn
+    1.go run -s en -st hello -t fn
+    2.go run -s en -st Brother -t fn
+    3.go run -s en -st Brother -t es
 
 #    Output
-    Bonjour
+    1.Bonjour
+    2.fr`ere
+    3.hermano
 
 
 
